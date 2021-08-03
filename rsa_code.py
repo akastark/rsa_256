@@ -10,6 +10,7 @@ class RSAClass:
         self.n = 0
         self.totient = 0
         self.d = 0
+        self.private_key = 0
         self.message = 0
         self.encrypted_message = 0
         self.decrypted_message = 0
@@ -48,12 +49,25 @@ class RSAClass:
     def calculate_d(self, k):
         self.d = (1 + (k*self.totient))/self.e
 
+    def generate_private_key(self):
+        d = 0
+
+        while((d*self.e)%self.totient) != 1:
+            d += 1
+
+        self.private_key = d
+
+
+
+    #encrypt a defined message
     def encrypt_message(self):
         en = pow(self.message, self.e)
         encrypted_message = en % self.n
 
         self.set_encrypted_message(encrypted_message)
 
+
+    #decrypt an encrypted message
     def decrypt_message(self):
 
         self.calculate_d(2)
@@ -73,13 +87,13 @@ def main():
 
 
     RSA = RSAClass(p, q, e)
-    RSA.set_message(12)
+    RSA.set_message("teste")
     RSA.calculate_totient()
     RSA.calculate_n()
 
     RSA.encrypt_message()
 
-    print(RSA.get_encrypted_message())
+    print(RSA.get_encrypted_message(RSA.message.encode()))
 
     RSA.decrypt_message()
 
